@@ -10,6 +10,7 @@ use App\Modules\Geography\Territory\Controllers\TerritoryController;
 use App\Modules\Geography\Locality\Controllers\LocalityController;
 use App\Modules\Geography\Locality\Controllers\GeoController;
 use App\Modules\CRM\Lead\Controllers\LeadController;
+use App\Modules\CRM\Deal\Controllers\DealController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,10 +44,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // CRM routes - Module 04 & 05
     Route::apiResource('leads', LeadController::class);
-
-    Route::prefix('deals')->group(function () {
-        // Deal CRUD routes
-    });
+    
+    Route::apiResource('deals', DealController::class);
+    Route::post('deals/{id}/documents', [DealController::class, 'uploadDocument']);
+    Route::post('deals/{id}/documents/{docId}/verify', [DealController::class, 'verifyDocument']);
+    Route::post('deals/{id}/approve', [DealController::class, 'approve']);
 
     // Partner routes - Module 06
     Route::prefix('partners')->group(function () {
