@@ -13,6 +13,8 @@ import TerritoryList from '@/pages/geography/TerritoryList';
 import TerritoryForm from '@/pages/geography/TerritoryForm';
 import LocalityList from '@/pages/geography/LocalityList';
 import LocalityForm from '@/pages/geography/LocalityForm';
+import LeadList from '@/pages/crm/LeadList';
+import LeadForm from '@/pages/crm/LeadForm';
 
 // Placeholder page component (will be replaced in later modules)
 function PlaceholderPage({ title }: { title: string }) {
@@ -49,7 +51,9 @@ function AppRoutes() {
             <Route path="/geography/localities" element={<LocalityList />} />
             <Route path="/geography/localities/create" element={<LocalityForm />} />
             <Route path="/geography/localities/:id/edit" element={<LocalityForm />} />
-            <Route path="/crm/leads" element={<PlaceholderPage title="Leads" />} />
+            <Route path="/crm/leads" element={<LeadList />} />
+            <Route path="/crm/leads/create" element={<LeadForm />} />
+            <Route path="/crm/leads/:id/edit" element={<LeadForm />} />
             <Route path="/crm/deals" element={<PlaceholderPage title="Deals" />} />
             <Route path="/partners" element={<PlaceholderPage title="Partners" />} />
             <Route path="/reports" element={<PlaceholderPage title="Reports" />} />
@@ -64,7 +68,9 @@ function AppRoutes() {
         <Route element={<RoleBasedRoute allowedRoles={['BDM']} />}>
           <Route element={<BDMLayout />}>
             <Route path="/dashboard" element={<PlaceholderPage title="BDM Dashboard" />} />
-            <Route path="/crm/leads" element={<PlaceholderPage title="My Leads" />} />
+            <Route path="/crm/leads" element={<LeadList />} />
+            <Route path="/crm/leads/create" element={<LeadForm />} />
+            <Route path="/crm/leads/:id/edit" element={<LeadForm />} />
             <Route path="/crm/deals" element={<PlaceholderPage title="My Deals" />} />
             <Route path="/partners" element={<PlaceholderPage title="Partners" />} />
             <Route path="/territory-map" element={<PlaceholderPage title="Territory Map" />} />

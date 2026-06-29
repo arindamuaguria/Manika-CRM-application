@@ -9,6 +9,7 @@ use App\Modules\Geography\Division\Controllers\DivisionController;
 use App\Modules\Geography\Territory\Controllers\TerritoryController;
 use App\Modules\Geography\Locality\Controllers\LocalityController;
 use App\Modules\Geography\Locality\Controllers\GeoController;
+use App\Modules\CRM\Lead\Controllers\LeadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,9 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('geo/identify', [GeoController::class, 'identify']);
 
     // CRM routes - Module 04 & 05
-    Route::prefix('leads')->group(function () {
-        // Lead CRUD routes
-    });
+    Route::apiResource('leads', LeadController::class);
 
     Route::prefix('deals')->group(function () {
         // Deal CRUD routes
