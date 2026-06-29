@@ -86,4 +86,4 @@ Implement role and permission management using Spatie Permission package with 4 
 - [ ] All RBAC changes logged in activity_log
 
 ## Status
-Not Started
+Completed
