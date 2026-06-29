@@ -12,6 +12,7 @@ use App\Modules\Geography\Locality\Controllers\GeoController;
 use App\Modules\CRM\Lead\Controllers\LeadController;
 use App\Modules\CRM\Deal\Controllers\DealController;
 use App\Modules\Partner\Controllers\PartnerController;
+use App\Modules\Dashboard\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,9 +57,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('partners/{id}/coverage', [PartnerController::class, 'syncCoverage']);
 
     // Dashboard routes - Module 07
-    Route::prefix('dashboard')->group(function () {
-        // Dashboard routes
-    });
+    Route::get('dashboard', [DashboardController::class, 'index']);
 
     // Notification routes - Module 08
     Route::prefix('notifications')->group(function () {

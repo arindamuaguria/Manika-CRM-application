@@ -19,6 +19,7 @@ import DealList from '@/pages/crm/DealList';
 import DealDetail from '@/pages/crm/DealDetail';
 import PartnerList from '@/pages/partner/PartnerList';
 import PartnerDetail from '@/pages/partner/PartnerDetail';
+import Dashboard from '@/pages/Dashboard';
 
 // Placeholder page component (will be replaced in later modules)
 function PlaceholderPage({ title }: { title: string }) {
@@ -45,7 +46,7 @@ function AppRoutes() {
         {/* Admin routes */}
         <Route element={<RoleBasedRoute allowedRoles={['Admin']} />}>
           <Route element={<AdminLayout />}>
-            <Route path="/dashboard" element={<PlaceholderPage title="Admin Dashboard" />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/geography/divisions" element={<DivisionList />} />
             <Route path="/geography/divisions/create" element={<DivisionForm />} />
             <Route path="/geography/divisions/:id/edit" element={<DivisionForm />} />
@@ -73,7 +74,7 @@ function AppRoutes() {
         {/* BDM routes */}
         <Route element={<RoleBasedRoute allowedRoles={['BDM']} />}>
           <Route element={<BDMLayout />}>
-            <Route path="/dashboard" element={<PlaceholderPage title="BDM Dashboard" />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/crm/leads" element={<LeadList />} />
             <Route path="/crm/leads/create" element={<LeadForm />} />
             <Route path="/crm/leads/:id/edit" element={<LeadForm />} />
