@@ -1,0 +1,27 @@
+# IDE and Editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.agents/
+
+# Operating System files
+Thumbs.db
+Ehthumbs.db
+Desktop.ini
+[Dd]ead.letter
+*.reap
+.DS_Store
+
+# PHP / Composer (handled in backend/.gitignore, but added here for safety)
+backend/vendor/
+backend/.env
+
+# Node / NPM (handled in frontend/.gitignore, but added here for safety)
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
