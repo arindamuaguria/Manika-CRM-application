@@ -84,4 +84,4 @@ Implement partner conversion from deals, partner profile management, service cov
 - [ ] All partner changes logged in activity_log
 
 ## Status
-Not Started
+Completed
