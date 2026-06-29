@@ -5,6 +5,10 @@ use App\Modules\Auth\Controllers\AuthController;
 use App\Modules\Auth\Controllers\UserController;
 use App\Modules\Auth\Controllers\RoleController;
 use App\Modules\Auth\Controllers\PermissionController;
+use App\Modules\Geography\Division\Controllers\DivisionController;
+use App\Modules\Geography\Territory\Controllers\TerritoryController;
+use App\Modules\Geography\Locality\Controllers\LocalityController;
+use App\Modules\Geography\Locality\Controllers\GeoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,17 +34,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 
     // Geography routes - Module 03
-    Route::prefix('divisions')->group(function () {
-        // Division CRUD routes
-    });
-
-    Route::prefix('territories')->group(function () {
-        // Territory CRUD routes
-    });
-
-    Route::prefix('localities')->group(function () {
-        // Locality CRUD routes
-    });
+    Route::apiResource('divisions', DivisionController::class);
+    Route::apiResource('territories', TerritoryController::class);
+    Route::post('territories/{id}/assign-bdm', [TerritoryController::class, 'assignBdm']);
+    Route::apiResource('localities', LocalityController::class);
+    Route::post('geo/identify', [GeoController::class, 'identify']);
 
     // CRM routes - Module 04 & 05
     Route::prefix('leads')->group(function () {
@@ -69,11 +67,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Report routes - Module 09
     Route::prefix('reports')->group(function () {
         // Report routes
-    });
-
-    // Geo service routes - Module 03
-    Route::prefix('geo')->group(function () {
-        // Geo service routes
     });
 
     // User/Role/Permission management routes - Module 02 (Admin only)

@@ -82,6 +82,11 @@ export interface Territory {
   boundaries: GeoJsonPolygon | null;
   is_active: boolean;
   assigned_bdm?: User;
+  active_assignment?: {
+    id: number;
+    user_id: number;
+    user?: User;
+  } | null;
   localities_count?: number;
   created_at: string;
   updated_at: string;

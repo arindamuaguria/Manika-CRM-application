@@ -7,6 +7,12 @@ import ForgotPassword from '@/pages/auth/ForgotPassword';
 import ResetPassword from '@/pages/auth/ResetPassword';
 import Users from '@/pages/admin/Users';
 import Roles from '@/pages/admin/Roles';
+import DivisionList from '@/pages/geography/DivisionList';
+import DivisionForm from '@/pages/geography/DivisionForm';
+import TerritoryList from '@/pages/geography/TerritoryList';
+import TerritoryForm from '@/pages/geography/TerritoryForm';
+import LocalityList from '@/pages/geography/LocalityList';
+import LocalityForm from '@/pages/geography/LocalityForm';
 
 // Placeholder page component (will be replaced in later modules)
 function PlaceholderPage({ title }: { title: string }) {
@@ -34,9 +40,15 @@ function AppRoutes() {
         <Route element={<RoleBasedRoute allowedRoles={['Admin']} />}>
           <Route element={<AdminLayout />}>
             <Route path="/dashboard" element={<PlaceholderPage title="Admin Dashboard" />} />
-            <Route path="/geography/divisions" element={<PlaceholderPage title="Divisions" />} />
-            <Route path="/geography/territories" element={<PlaceholderPage title="Territories" />} />
-            <Route path="/geography/localities" element={<PlaceholderPage title="Localities" />} />
+            <Route path="/geography/divisions" element={<DivisionList />} />
+            <Route path="/geography/divisions/create" element={<DivisionForm />} />
+            <Route path="/geography/divisions/:id/edit" element={<DivisionForm />} />
+            <Route path="/geography/territories" element={<TerritoryList />} />
+            <Route path="/geography/territories/create" element={<TerritoryForm />} />
+            <Route path="/geography/territories/:id/edit" element={<TerritoryForm />} />
+            <Route path="/geography/localities" element={<LocalityList />} />
+            <Route path="/geography/localities/create" element={<LocalityForm />} />
+            <Route path="/geography/localities/:id/edit" element={<LocalityForm />} />
             <Route path="/crm/leads" element={<PlaceholderPage title="Leads" />} />
             <Route path="/crm/deals" element={<PlaceholderPage title="Deals" />} />
             <Route path="/partners" element={<PlaceholderPage title="Partners" />} />
