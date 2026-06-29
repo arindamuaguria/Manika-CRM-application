@@ -11,11 +11,16 @@ class LeadService
 {
     protected LeadRepository $leadRepository;
     protected GeoService $geoService;
+    protected \App\Modules\Notification\Services\NotificationService $notificationService;
 
-    public function __construct(LeadRepository $leadRepository, GeoService $geoService)
-    {
+    public function __construct(
+        LeadRepository $leadRepository, 
+        GeoService $geoService,
+        \App\Modules\Notification\Services\NotificationService $notificationService
+    ) {
         $this->leadRepository = $leadRepository;
         $this->geoService = $geoService;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -51,7 +56,18 @@ class LeadService
 
         $data['created_by'] = auth()->id();
 
-        return $this->leadRepository->create($data);
+        $lead = $this->leadRepository->create($data);
+
+        if ($lead->assigned_bdm_id) {
+            $this->notificationService->sendNotification(
+                $lead->assigned_bdm_id,
+                'lead_assigned',
+                'New Lead Assigned',
+                "Lead '{$lead->title}' has been assigned to you."
+            );
+        }
+
+        return $lead;
     }
 
     /**
@@ -60,6 +76,7 @@ class LeadService
     public function updateLead(int $id, array $data): Lead
     {
         $lead = Lead::findOrFail($id);
+        $oldBdmId = $lead->assigned_bdm_id;
 
         // Duplicate Detection (excluding current lead)
         $this->checkDuplicateMobile($data['contact_mobile'], $lead->id);
@@ -92,7 +109,18 @@ class LeadService
             }
         }
 
-        return $this->leadRepository->update($id, $data);
+        $updatedLead = $this->leadRepository->update($id, $data);
+
+        if ($updatedLead->assigned_bdm_id && $updatedLead->assigned_bdm_id !== $oldBdmId) {
+            $this->notificationService->sendNotification(
+                $updatedLead->assigned_bdm_id,
+                'lead_assigned',
+                'New Lead Assigned',
+                "Lead '{$updatedLead->title}' has been assigned to you."
+            );
+        }
+
+        return $updatedLead;
     }
 
     /**

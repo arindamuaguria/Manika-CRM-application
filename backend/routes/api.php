@@ -13,6 +13,7 @@ use App\Modules\CRM\Lead\Controllers\LeadController;
 use App\Modules\CRM\Deal\Controllers\DealController;
 use App\Modules\Partner\Controllers\PartnerController;
 use App\Modules\Dashboard\Controllers\DashboardController;
+use App\Modules\Notification\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,9 +61,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index']);
 
     // Notification routes - Module 08
-    Route::prefix('notifications')->group(function () {
-        // Notification routes
-    });
+    Route::get('notifications', [NotificationController::class, 'index']);
+    Route::post('notifications/{id}/read', [NotificationController::class, 'markRead']);
+    Route::post('notifications/read-all', [NotificationController::class, 'markAllRead']);
 
     // Report routes - Module 09
     Route::prefix('reports')->group(function () {

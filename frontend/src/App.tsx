@@ -20,6 +20,7 @@ import DealDetail from '@/pages/crm/DealDetail';
 import PartnerList from '@/pages/partner/PartnerList';
 import PartnerDetail from '@/pages/partner/PartnerDetail';
 import Dashboard from '@/pages/Dashboard';
+import NotificationList from '@/pages/notification/NotificationList';
 
 // Placeholder page component (will be replaced in later modules)
 function PlaceholderPage({ title }: { title: string }) {
@@ -64,7 +65,7 @@ function AppRoutes() {
             <Route path="/partners" element={<PartnerList />} />
             <Route path="/partners/:id" element={<PartnerDetail />} />
             <Route path="/reports" element={<PlaceholderPage title="Reports" />} />
-            <Route path="/notifications" element={<PlaceholderPage title="Notifications" />} />
+            <Route path="/notifications" element={<NotificationList />} />
             <Route path="/admin/users" element={<Users />} />
             <Route path="/admin/roles" element={<Roles />} />
             <Route path="/settings" element={<PlaceholderPage title="Settings" />} />
@@ -82,6 +83,7 @@ function AppRoutes() {
             <Route path="/crm/deals/:id" element={<DealDetail />} />
             <Route path="/partners" element={<PartnerList />} />
             <Route path="/partners/:id" element={<PartnerDetail />} />
+            <Route path="/notifications" element={<NotificationList />} />
             <Route path="/territory-map" element={<PlaceholderPage title="Territory Map" />} />
           </Route>
         </Route>

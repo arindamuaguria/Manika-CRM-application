@@ -13,10 +13,14 @@ use Illuminate\Validation\ValidationException;
 class DealService
 {
     protected DealRepository $dealRepository;
+    protected \App\Modules\Notification\Services\NotificationService $notificationService;
 
-    public function __construct(DealRepository $dealRepository)
-    {
+    public function __construct(
+        DealRepository $dealRepository,
+        \App\Modules\Notification\Services\NotificationService $notificationService
+    ) {
         $this->dealRepository = $dealRepository;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -75,6 +79,14 @@ class DealService
             $deal->update(['status' => 'documentation']);
         }
 
+        // Notify Admins
+        $this->notificationService->sendToRole(
+            'Admin',
+            'document_uploaded',
+            'Deal Document Uploaded',
+            "A new document '{$docType}' has been uploaded for deal '{$deal->title}'."
+        );
+
         return $document;
     }
 
@@ -95,6 +107,16 @@ class DealService
 
         // Recalculate deal verification status
         $this->updateDealVerificationStatus($deal);
+
+        // Notify BDM
+        if ($deal->assigned_bdm_id) {
+            $this->notificationService->sendNotification(
+                $deal->assigned_bdm_id,
+                'document_verified',
+                'Document Verification Updated',
+                "Your document '{$document->document_type}' for deal '{$deal->title}' has been marked as {$status}."
+            );
+        }
 
         return $document;
     }
@@ -129,6 +151,17 @@ class DealService
                 'approved_at' => now(),
                 'notes' => $notes,
             ]);
+        }
+
+        // Notify BDM
+        if ($deal->assigned_bdm_id) {
+            $statusWord = $action === 'approve' ? 'approved' : 'rejected';
+            $this->notificationService->sendNotification(
+                $deal->assigned_bdm_id,
+                'deal_approval',
+                'Deal Approval Updated',
+                "Your deal '{$deal->title}' has been {$statusWord}."
+            );
         }
 
         return $deal;
