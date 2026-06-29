@@ -83,4 +83,4 @@ Implement reporting module with filterable reports for leads, deals, partners, a
 - [ ] Print-friendly layout available
 
 ## Status
-Not Started
+Completed
