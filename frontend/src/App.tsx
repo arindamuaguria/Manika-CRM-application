@@ -17,6 +17,8 @@ import LeadList from '@/pages/crm/LeadList';
 import LeadForm from '@/pages/crm/LeadForm';
 import DealList from '@/pages/crm/DealList';
 import DealDetail from '@/pages/crm/DealDetail';
+import PartnerList from '@/pages/partner/PartnerList';
+import PartnerDetail from '@/pages/partner/PartnerDetail';
 
 // Placeholder page component (will be replaced in later modules)
 function PlaceholderPage({ title }: { title: string }) {
@@ -58,7 +60,8 @@ function AppRoutes() {
             <Route path="/crm/leads/:id/edit" element={<LeadForm />} />
             <Route path="/crm/deals" element={<DealList />} />
             <Route path="/crm/deals/:id" element={<DealDetail />} />
-            <Route path="/partners" element={<PlaceholderPage title="Partners" />} />
+            <Route path="/partners" element={<PartnerList />} />
+            <Route path="/partners/:id" element={<PartnerDetail />} />
             <Route path="/reports" element={<PlaceholderPage title="Reports" />} />
             <Route path="/notifications" element={<PlaceholderPage title="Notifications" />} />
             <Route path="/admin/users" element={<Users />} />
@@ -76,7 +79,8 @@ function AppRoutes() {
             <Route path="/crm/leads/:id/edit" element={<LeadForm />} />
             <Route path="/crm/deals" element={<DealList />} />
             <Route path="/crm/deals/:id" element={<DealDetail />} />
-            <Route path="/partners" element={<PlaceholderPage title="Partners" />} />
+            <Route path="/partners" element={<PartnerList />} />
+            <Route path="/partners/:id" element={<PartnerDetail />} />
             <Route path="/territory-map" element={<PlaceholderPage title="Territory Map" />} />
           </Route>
         </Route>

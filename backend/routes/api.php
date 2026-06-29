@@ -11,6 +11,7 @@ use App\Modules\Geography\Locality\Controllers\LocalityController;
 use App\Modules\Geography\Locality\Controllers\GeoController;
 use App\Modules\CRM\Lead\Controllers\LeadController;
 use App\Modules\CRM\Deal\Controllers\DealController;
+use App\Modules\Partner\Controllers\PartnerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,9 +52,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('deals/{id}/approve', [DealController::class, 'approve']);
 
     // Partner routes - Module 06
-    Route::prefix('partners')->group(function () {
-        // Partner routes
-    });
+    Route::apiResource('partners', PartnerController::class);
+    Route::post('partners/{id}/coverage', [PartnerController::class, 'syncCoverage']);
 
     // Dashboard routes - Module 07
     Route::prefix('dashboard')->group(function () {
