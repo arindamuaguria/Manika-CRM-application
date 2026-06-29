@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import { AdminLayout, BDMLayout } from '@/layouts';
 import { ProtectedRoute, RoleBasedRoute } from '@/routes';
+import Login from '@/pages/auth/Login';
+import ForgotPassword from '@/pages/auth/ForgotPassword';
+import ResetPassword from '@/pages/auth/ResetPassword';
 
 // Placeholder page component (will be replaced in later modules)
 function PlaceholderPage({ title }: { title: string }) {
@@ -13,25 +16,15 @@ function PlaceholderPage({ title }: { title: string }) {
   );
 }
 
-// Login page placeholder (will be replaced in Module 01)
-function LoginPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900">
-      <div className="glass rounded-2xl p-8 w-full max-w-md shadow-xl animate-slide-up">
-        <h1 className="text-2xl font-bold text-neutral-900 text-center mb-6">Manika CRM</h1>
-        <p className="text-neutral-500 text-center">Login will be implemented in Module 01 - Authentication</p>
-      </div>
-    </div>
-  );
-}
-
 function AppRoutes() {
   const { isAuthenticated } = useAuthStore();
 
   return (
     <Routes>
       {/* Public routes */}
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* Protected routes */}
       <Route element={<ProtectedRoute />}>

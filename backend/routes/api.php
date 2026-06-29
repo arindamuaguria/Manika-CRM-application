@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Modules\Auth\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,13 +15,16 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::prefix('auth')->group(function () {
-    // Auth routes will be added in Module 01
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 });
 
 // Protected routes (require authentication)
 Route::middleware('auth:sanctum')->group(function () {
     // User profile
-    // Route::get('/me', ...); // Module 01
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
 
     // Geography routes - Module 03
     Route::prefix('divisions')->group(function () {
