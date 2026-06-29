@@ -72,4 +72,4 @@ Implement secure token-based authentication using Laravel Sanctum with login, lo
 - [ ] Role-based redirect works (Admin → Admin Dashboard, BDM → BDM Dashboard)
 
 ## Status
-Not Started
+Completed
