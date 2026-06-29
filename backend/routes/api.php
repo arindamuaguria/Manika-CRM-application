@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Modules\Auth\Controllers\AuthController;
+use App\Modules\Auth\Controllers\UserController;
+use App\Modules\Auth\Controllers\RoleController;
+use App\Modules\Auth\Controllers\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,16 +76,11 @@ Route::middleware('auth:sanctum')->group(function () {
         // Geo service routes
     });
 
-    // User/Role management routes - Module 02
-    Route::prefix('users')->group(function () {
-        // User management routes (Admin only)
-    });
-
-    Route::prefix('roles')->group(function () {
-        // Role management routes (Admin only)
-    });
-
-    Route::prefix('permissions')->group(function () {
-        // Permission routes (Admin only)
+    // User/Role/Permission management routes - Module 02 (Admin only)
+    Route::middleware('role:Admin')->group(function () {
+        Route::apiResource('users', UserController::class);
+        Route::post('users/{id}/assign-role', [UserController::class, 'assignRole']);
+        Route::apiResource('roles', RoleController::class);
+        Route::get('permissions', [PermissionController::class, 'index']);
     });
 });

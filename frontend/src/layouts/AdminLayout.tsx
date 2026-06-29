@@ -17,6 +17,7 @@ import {
   FileText,
   Building2,
   MapPin,
+  Shield,
 } from 'lucide-react';
 import { cn } from '@/utils';
 
@@ -42,12 +43,20 @@ const adminNavItems = [
   { label: 'Partners', icon: Handshake, path: '/partners' },
   { label: 'Reports', icon: BarChart3, path: '/reports' },
   { label: 'Notifications', icon: Bell, path: '/notifications' },
+  {
+    label: 'Security',
+    icon: Shield,
+    children: [
+      { label: 'Users', icon: Users, path: '/admin/users' },
+      { label: 'Roles', icon: Shield, path: '/admin/roles' },
+    ],
+  },
   { label: 'Settings', icon: Settings, path: '/settings' },
 ];
 
 export function AdminLayout() {
   const [collapsed, setCollapsed] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState<string[]>(['Geography', 'CRM']);
+  const [expandedGroups, setExpandedGroups] = useState<string[]>(['Geography', 'CRM', 'Security']);
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
 

@@ -5,6 +5,8 @@ import { ProtectedRoute, RoleBasedRoute } from '@/routes';
 import Login from '@/pages/auth/Login';
 import ForgotPassword from '@/pages/auth/ForgotPassword';
 import ResetPassword from '@/pages/auth/ResetPassword';
+import Users from '@/pages/admin/Users';
+import Roles from '@/pages/admin/Roles';
 
 // Placeholder page component (will be replaced in later modules)
 function PlaceholderPage({ title }: { title: string }) {
@@ -40,6 +42,8 @@ function AppRoutes() {
             <Route path="/partners" element={<PlaceholderPage title="Partners" />} />
             <Route path="/reports" element={<PlaceholderPage title="Reports" />} />
             <Route path="/notifications" element={<PlaceholderPage title="Notifications" />} />
+            <Route path="/admin/users" element={<Users />} />
+            <Route path="/admin/roles" element={<Roles />} />
             <Route path="/settings" element={<PlaceholderPage title="Settings" />} />
           </Route>
         </Route>
