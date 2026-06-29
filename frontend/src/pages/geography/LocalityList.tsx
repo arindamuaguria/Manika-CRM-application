@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '@/services/api';
-import type { Locality, Territory, PaginatedResponse, ApiResponse } from '@/types';
+import type { Locality, Territory, PaginatedResponse } from '@/types';
 import { Plus, Search, Edit2, Trash2, MapPin, Loader2 } from 'lucide-react';
 import { usePermission } from '@/hooks';
 
@@ -36,8 +36,8 @@ export default function LocalityList() {
 
   const fetchTerritories = async () => {
     try {
-      const response = await api.get<ApiResponse<Territory[]>>('/territories?per_page=100');
-      setTerritories(response.data.data);
+      const response = await api.get<PaginatedResponse<Territory>>('/territories?per_page=100');
+      setTerritories(response.data.data.data);
     } catch (err) {
       console.error(err);
     }

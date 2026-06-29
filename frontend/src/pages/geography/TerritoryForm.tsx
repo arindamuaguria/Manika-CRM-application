@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '@/services/api';
 import MapContainer from '@/components/maps/MapContainer';
 import PolygonDrawer from '@/components/maps/PolygonDrawer';
-import type { Territory, Division, ApiResponse } from '@/types';
+import type { Territory, Division, ApiResponse, PaginatedResponse } from '@/types';
 import { ArrowLeft, Loader2, Map } from 'lucide-react';
 
 export default function TerritoryForm() {
@@ -30,10 +30,10 @@ export default function TerritoryForm() {
   useEffect(() => {
     const fetchDivisions = async () => {
       try {
-        const response = await api.get<ApiResponse<Division[]>>('/divisions?per_page=100');
-        setDivisions(response.data.data);
-        if (!isEdit && response.data.data.length > 0) {
-          setFormData((prev) => ({ ...prev, division_id: response.data.data[0].id.toString() }));
+        const response = await api.get<PaginatedResponse<Division>>('/divisions?per_page=100');
+        setDivisions(response.data.data.data);
+        if (!isEdit && response.data.data.data.length > 0) {
+          setFormData((prev) => ({ ...prev, division_id: response.data.data.data[0].id.toString() }));
         }
       } catch (err) {
         console.error(err);

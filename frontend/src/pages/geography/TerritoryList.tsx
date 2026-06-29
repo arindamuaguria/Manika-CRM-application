@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '@/services/api';
-import type { Territory, Division, User, PaginatedResponse, ApiResponse } from '@/types';
+import type { Territory, Division, User, PaginatedResponse } from '@/types';
 import { Plus, Search, Edit2, Trash2, Map, Users, Loader2 } from 'lucide-react';
 import { usePermission } from '@/hooks';
 
@@ -44,10 +44,10 @@ export default function TerritoryList() {
   const fetchDivisionsAndBdms = async () => {
     try {
       const [divRes, bdmRes] = await Promise.all([
-        api.get<ApiResponse<Division[]>>('/divisions?per_page=100'),
+        api.get<PaginatedResponse<Division>>('/divisions?per_page=100'),
         api.get<PaginatedResponse<User>>('/users?role=BDM&per_page=100'),
       ]);
-      setDivisions(divRes.data.data);
+      setDivisions(divRes.data.data.data);
       setBdms(bdmRes.data.data.data);
     } catch (err) {
       console.error(err);

@@ -4,7 +4,7 @@ import api from '@/services/api';
 import MapContainer from '@/components/maps/MapContainer';
 import PolygonDrawer from '@/components/maps/PolygonDrawer';
 import PolygonViewer from '@/components/maps/PolygonViewer';
-import type { Locality, Territory, ApiResponse } from '@/types';
+import type { Territory, Locality, ApiResponse, PaginatedResponse } from '@/types';
 import { ArrowLeft, Loader2, MapPin } from 'lucide-react';
 
 export default function LocalityForm() {
@@ -32,10 +32,10 @@ export default function LocalityForm() {
   useEffect(() => {
     const fetchTerritories = async () => {
       try {
-        const response = await api.get<ApiResponse<Territory[]>>('/territories?per_page=100');
-        setTerritories(response.data.data);
-        if (!isEdit && response.data.data.length > 0) {
-          const firstT = response.data.data[0];
+        const response = await api.get<PaginatedResponse<Territory>>('/territories?per_page=100');
+        setTerritories(response.data.data.data);
+        if (!isEdit && response.data.data.data.length > 0) {
+          const firstT = response.data.data.data[0];
           setFormData((prev) => ({ ...prev, territory_id: firstT.id.toString() }));
           setSelectedTerritory(firstT);
         }
