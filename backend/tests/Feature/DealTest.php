@@ -2,13 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\Division;
-use App\Models\Territory;
-use App\Models\Locality;
-use App\Models\Lead;
 use App\Models\Deal;
 use App\Models\DealDocument;
+use App\Models\Division;
+use App\Models\Lead;
+use App\Models\Territory;
+use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -21,8 +20,11 @@ class DealTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected User $bdm1;
+
     protected User $bdm2;
+
     protected Lead $lead;
 
     protected function setUp(): void
@@ -42,7 +44,7 @@ class DealTest extends TestCase
 
         $division = Division::create(['name' => 'North', 'code' => 'DIV-NORTH']);
         $territory = Territory::create(['division_id' => $division->id, 'name' => 'Delhi', 'code' => 'TERR-DELHI']);
-        
+
         $this->lead = Lead::create([
             'title' => 'Delhi Lead',
             'contact_name' => 'Rajesh Kumar',

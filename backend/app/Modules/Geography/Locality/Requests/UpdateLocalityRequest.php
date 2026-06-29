@@ -16,7 +16,7 @@ class UpdateLocalityRequest extends FormRequest
         return [
             'territory_id' => ['required', 'exists:territories,id'],
             'name' => ['required', 'string', 'max:255'],
-            'code' => ['required', 'string', 'max:50', 'unique:localities,code,' . $this->route('locality')],
+            'code' => ['required', 'string', 'max:50', 'unique:localities,code,'.$this->route('locality')],
             'description' => ['nullable', 'string'],
             'polygon' => ['nullable', 'array'],
             'geo_data' => ['nullable', 'array'],

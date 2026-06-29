@@ -14,6 +14,7 @@ class PermissionController extends BaseApiController
     public function index(): JsonResponse
     {
         $permissions = Permission::all();
+
         return $this->successResponse($permissions, 'Permissions retrieved successfully');
     }
 }

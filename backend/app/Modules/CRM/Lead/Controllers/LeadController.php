@@ -40,8 +40,8 @@ class LeadController extends BaseApiController
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('contact_name', 'like', "%{$search}%")
-                  ->orWhere('contact_mobile', 'like', "%{$search}%");
+                    ->orWhere('contact_name', 'like', "%{$search}%")
+                    ->orWhere('contact_mobile', 'like', "%{$search}%");
             });
         }
 
@@ -54,6 +54,7 @@ class LeadController extends BaseApiController
         }
 
         $leads = $query->paginate($request->input('per_page', 15));
+
         return $this->successResponse($leads, 'Leads retrieved successfully');
     }
 

@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\Division;
-use App\Models\Territory;
-use App\Models\Locality;
-use App\Models\Lead;
 use App\Models\Deal;
+use App\Models\Division;
+use App\Models\Lead;
+use App\Models\Locality;
 use App\Models\Partner;
+use App\Models\Territory;
+use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -19,9 +19,13 @@ class PartnerTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected User $bdm;
+
     protected Deal $approvedDeal;
+
     protected Deal $draftDeal;
+
     protected Locality $locality;
 
     protected function setUp(): void
@@ -38,7 +42,7 @@ class PartnerTest extends TestCase
 
         $division = Division::create(['name' => 'South', 'code' => 'DIV-SOUTH']);
         $territory = Territory::create(['division_id' => $division->id, 'name' => 'Chennai', 'code' => 'TERR-CHENNAI']);
-        
+
         $this->locality = Locality::create([
             'territory_id' => $territory->id,
             'name' => 'Adyar',

@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class BaseRepository
@@ -34,6 +34,7 @@ abstract class BaseRepository
     {
         $record = $this->find($id);
         $record->update($data);
+
         return $record->fresh();
     }
 

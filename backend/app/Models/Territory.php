@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Territory extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = [
         'division_id',
@@ -55,10 +56,16 @@ class Territory extends Model
         return $this->hasOne(TerritoryBdmAssignment::class)->where('is_active', true);
     }
 
-    public function assignedBdm(): BelongsTo
+    public function assignedBdm(): HasOneThrough
     {
-        // This is a helper relationship to get the BDM user directly through the active assignment
-        return $this->belongsTo(User::class, 'id', 'id')->hasOne(TerritoryBdmAssignment::class)->where('is_active', true);
+        return $this->hasOneThrough(
+            User::class,
+            TerritoryBdmAssignment::class,
+            'territory_id',
+            'id',
+            'id',
+            'user_id'
+        )->where('territory_bdm_assignments.is_active', true);
     }
 
     public function getActivitylogOptions(): LogOptions

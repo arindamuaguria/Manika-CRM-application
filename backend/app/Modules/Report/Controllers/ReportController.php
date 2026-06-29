@@ -3,8 +3,8 @@
 namespace App\Modules\Report\Controllers;
 
 use App\Http\Controllers\Api\BaseApiController;
-use App\Models\Lead;
 use App\Models\Deal;
+use App\Models\Lead;
 use App\Models\Partner;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,6 +24,7 @@ class ReportController extends BaseApiController
         $this->applyLeadFilters($query, $request);
 
         $data = $query->paginate($request->input('per_page', 15));
+
         return $this->successResponse($data, 'Leads report preview retrieved');
     }
 
@@ -39,16 +40,16 @@ class ReportController extends BaseApiController
 
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="leads_report_' . now()->format('YmdHis') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="leads_report_'.now()->format('YmdHis').'.csv"',
         ];
 
         return new StreamedResponse(function () use ($query) {
             $handle = fopen('php://output', 'w');
-            
+
             // Add CSV headers
             fputcsv($handle, [
-                'Lead ID', 'Title', 'Contact Name', 'Mobile', 'Email', 
-                'Status', 'Priority', 'Assigned BDM', 'Territory', 'Locality', 'Created At'
+                'Lead ID', 'Title', 'Contact Name', 'Mobile', 'Email',
+                'Status', 'Priority', 'Assigned BDM', 'Territory', 'Locality', 'Created At',
             ]);
 
             $query->chunk(100, function ($leads) use ($handle) {
@@ -84,6 +85,7 @@ class ReportController extends BaseApiController
         $this->applyDealFilters($query, $request);
 
         $data = $query->paginate($request->input('per_page', 15));
+
         return $this->successResponse($data, 'Deals report preview retrieved');
     }
 
@@ -99,7 +101,7 @@ class ReportController extends BaseApiController
 
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="deals_report_' . now()->format('YmdHis') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="deals_report_'.now()->format('YmdHis').'.csv"',
         ];
 
         return new StreamedResponse(function () use ($query) {
@@ -107,7 +109,7 @@ class ReportController extends BaseApiController
 
             fputcsv($handle, [
                 'Deal ID', 'Title', 'Value (INR)', 'Status', 'Verification Status',
-                'Approval Status', 'Assigned BDM', 'Territory', 'Lead Name', 'Created At'
+                'Approval Status', 'Assigned BDM', 'Territory', 'Lead Name', 'Created At',
             ]);
 
             $query->chunk(100, function ($deals) use ($handle) {
@@ -142,6 +144,7 @@ class ReportController extends BaseApiController
         $this->applyPartnerFilters($query, $request);
 
         $data = $query->paginate($request->input('per_page', 15));
+
         return $this->successResponse($data, 'Partners report preview retrieved');
     }
 
@@ -157,7 +160,7 @@ class ReportController extends BaseApiController
 
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="partners_report_' . now()->format('YmdHis') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="partners_report_'.now()->format('YmdHis').'.csv"',
         ];
 
         return new StreamedResponse(function () use ($query) {
@@ -165,7 +168,7 @@ class ReportController extends BaseApiController
 
             fputcsv($handle, [
                 'Partner ID', 'Business Name', 'Partner Type', 'Contact Name', 'Mobile',
-                'Email', 'Status', 'Locality', 'Territory', 'Onboarded At'
+                'Email', 'Status', 'Locality', 'Territory', 'Onboarded At',
             ]);
 
             $query->chunk(100, function ($partners) use ($handle) {

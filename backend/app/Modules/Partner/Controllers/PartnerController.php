@@ -33,7 +33,7 @@ class PartnerController extends BaseApiController
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('business_name', 'like', "%{$search}%")
-                  ->orWhere('contact_name', 'like', "%{$search}%");
+                    ->orWhere('contact_name', 'like', "%{$search}%");
             });
         }
 
@@ -46,6 +46,7 @@ class PartnerController extends BaseApiController
         }
 
         $partners = $query->paginate($request->input('per_page', 15));
+
         return $this->successResponse($partners, 'Partners retrieved successfully');
     }
 
@@ -73,6 +74,7 @@ class PartnerController extends BaseApiController
         Gate::authorize('partners.view');
 
         $partner = Partner::with(['user', 'deal', 'locality', 'territory', 'coverageLocalities'])->findOrFail($id);
+
         return $this->successResponse($partner, 'Partner details retrieved successfully');
     }
 

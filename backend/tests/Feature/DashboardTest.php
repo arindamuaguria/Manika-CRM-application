@@ -2,10 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\Lead;
 use App\Models\Deal;
-use App\Models\Partner;
+use App\Models\Lead;
+use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -16,7 +15,9 @@ class DashboardTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected User $bdm;
+
     protected User $seller;
 
     protected function setUp(): void

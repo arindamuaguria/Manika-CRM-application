@@ -3,12 +3,11 @@
 namespace App\Modules\Dashboard\Controllers;
 
 use App\Http\Controllers\Api\BaseApiController;
-use App\Models\Lead;
 use App\Models\Deal;
+use App\Models\Lead;
 use App\Models\Partner;
 use App\Models\Territory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 
@@ -48,8 +47,8 @@ class DashboardController extends BaseApiController
         $pipelineValue = Deal::whereIn('status', ['draft', 'documentation', 'verification', 'approval'])->sum('value');
 
         $driver = DB::connection()->getDriverName();
-        $monthFormat = $driver === 'sqlite' 
-            ? "strftime('%Y-%m', created_at)" 
+        $monthFormat = $driver === 'sqlite'
+            ? "strftime('%Y-%m', created_at)"
             : "DATE_FORMAT(created_at, '%Y-%m')";
 
         // Monthly won deals trend (last 6 months)
@@ -58,11 +57,11 @@ class DashboardController extends BaseApiController
             DB::raw('count(*) as count'),
             DB::raw('sum(value) as revenue')
         )
-        ->where('status', 'won')
-        ->groupBy('month')
-        ->orderBy('month', 'asc')
-        ->limit(6)
-        ->get();
+            ->where('status', 'won')
+            ->groupBy('month')
+            ->orderBy('month', 'asc')
+            ->limit(6)
+            ->get();
 
         // Recent Activity Logs (Spatie ActivityLog)
         $recentActivities = Activity::with('causer')
@@ -112,20 +111,20 @@ class DashboardController extends BaseApiController
         $myTerritories = Territory::whereHas('assignments', function ($q) use ($bdmId) {
             $q->where('user_id', $bdmId)->where('is_active', true);
         })
-        ->withCount('localities')
-        ->get()
-        ->map(function ($t) {
-            return [
-                'id' => $t->id,
-                'name' => $t->name,
-                'code' => $t->code,
-                'localities_count' => $t->localities_count,
-            ];
-        });
+            ->withCount('localities')
+            ->get()
+            ->map(function ($t) {
+                return [
+                    'id' => $t->id,
+                    'name' => $t->name,
+                    'code' => $t->code,
+                    'localities_count' => $t->localities_count,
+                ];
+            });
 
         $driver = DB::connection()->getDriverName();
-        $monthFormat = $driver === 'sqlite' 
-            ? "strftime('%Y-%m', created_at)" 
+        $monthFormat = $driver === 'sqlite'
+            ? "strftime('%Y-%m', created_at)"
             : "DATE_FORMAT(created_at, '%Y-%m')";
 
         // BDM monthly trend
@@ -134,12 +133,12 @@ class DashboardController extends BaseApiController
             DB::raw('count(*) as count'),
             DB::raw('sum(value) as revenue')
         )
-        ->where('assigned_bdm_id', $bdmId)
-        ->where('status', 'won')
-        ->groupBy('month')
-        ->orderBy('month', 'asc')
-        ->limit(6)
-        ->get();
+            ->where('assigned_bdm_id', $bdmId)
+            ->where('status', 'won')
+            ->groupBy('month')
+            ->orderBy('month', 'asc')
+            ->limit(6)
+            ->get();
 
         return $this->successResponse([
             'role' => 'BDM',

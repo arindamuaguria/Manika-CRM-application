@@ -45,6 +45,7 @@ class DealController extends BaseApiController
         }
 
         $deals = $query->paginate($request->input('per_page', 15));
+
         return $this->successResponse($deals, 'Deals retrieved successfully');
     }
 

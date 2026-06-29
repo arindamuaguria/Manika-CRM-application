@@ -60,7 +60,7 @@ class NotificationService
     public function markAsRead(int $notificationId, int $userId): CrmNotification
     {
         $notification = CrmNotification::where('user_id', $userId)->findOrFail($notificationId);
-        
+
         $notification->update([
             'is_read' => true,
             'read_at' => now(),

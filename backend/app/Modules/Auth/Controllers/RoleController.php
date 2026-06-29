@@ -15,6 +15,7 @@ class RoleController extends BaseApiController
     public function index(): JsonResponse
     {
         $roles = Role::with('permissions')->get();
+
         return $this->successResponse($roles, 'Roles retrieved successfully');
     }
 
@@ -57,7 +58,7 @@ class RoleController extends BaseApiController
         }
 
         $request->validate([
-            'name' => ['required', 'string', 'unique:roles,name,' . $id],
+            'name' => ['required', 'string', 'unique:roles,name,'.$id],
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['string', 'exists:permissions,name'],
         ]);

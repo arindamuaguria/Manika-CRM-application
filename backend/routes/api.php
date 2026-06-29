@@ -1,20 +1,20 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Modules\Auth\Controllers\AuthController;
-use App\Modules\Auth\Controllers\UserController;
-use App\Modules\Auth\Controllers\RoleController;
 use App\Modules\Auth\Controllers\PermissionController;
-use App\Modules\Geography\Division\Controllers\DivisionController;
-use App\Modules\Geography\Territory\Controllers\TerritoryController;
-use App\Modules\Geography\Locality\Controllers\LocalityController;
-use App\Modules\Geography\Locality\Controllers\GeoController;
-use App\Modules\CRM\Lead\Controllers\LeadController;
+use App\Modules\Auth\Controllers\RoleController;
+use App\Modules\Auth\Controllers\UserController;
 use App\Modules\CRM\Deal\Controllers\DealController;
-use App\Modules\Partner\Controllers\PartnerController;
+use App\Modules\CRM\Lead\Controllers\LeadController;
 use App\Modules\Dashboard\Controllers\DashboardController;
+use App\Modules\Geography\Division\Controllers\DivisionController;
+use App\Modules\Geography\Locality\Controllers\GeoController;
+use App\Modules\Geography\Locality\Controllers\LocalityController;
+use App\Modules\Geography\Territory\Controllers\TerritoryController;
 use App\Modules\Notification\Controllers\NotificationController;
+use App\Modules\Partner\Controllers\PartnerController;
 use App\Modules\Report\Controllers\ReportController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // CRM routes - Module 04 & 05
     Route::apiResource('leads', LeadController::class);
-    
+
     Route::apiResource('deals', DealController::class);
     Route::post('deals/{id}/documents', [DealController::class, 'uploadDocument']);
     Route::post('deals/{id}/documents/{docId}/verify', [DealController::class, 'verifyDocument']);

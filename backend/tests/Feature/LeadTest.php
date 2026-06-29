@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\Division;
-use App\Models\Territory;
-use App\Models\Locality;
 use App\Models\Lead;
+use App\Models\Locality;
+use App\Models\Territory;
+use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -17,10 +17,15 @@ class LeadTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected User $bdm1;
+
     protected User $bdm2;
+
     protected Locality $locality;
+
     protected Territory $territory;
+
     protected Division $division;
 
     protected function setUp(): void
@@ -43,7 +48,7 @@ class LeadTest extends TestCase
         // Create Geography
         $this->division = Division::create(['name' => 'West', 'code' => 'DIV-WEST']);
         $this->territory = Territory::create(['division_id' => $this->division->id, 'name' => 'Mumbai', 'code' => 'TERR-MUMBAI']);
-        
+
         // Define a square polygon around Mumbai: [lng, lat]
         $polygon = [
             'type' => 'Polygon',
@@ -52,8 +57,8 @@ class LeadTest extends TestCase
                 [73.0, 19.0],
                 [73.0, 19.2],
                 [72.8, 19.2],
-                [72.8, 19.0]
-            ]]
+                [72.8, 19.0],
+            ]],
         ];
 
         $this->locality = Locality::create([

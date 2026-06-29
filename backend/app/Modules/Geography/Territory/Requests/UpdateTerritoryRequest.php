@@ -16,7 +16,7 @@ class UpdateTerritoryRequest extends FormRequest
         return [
             'division_id' => ['required', 'exists:divisions,id'],
             'name' => ['required', 'string', 'max:255'],
-            'code' => ['required', 'string', 'max:50', 'unique:territories,code,' . $this->route('territory')],
+            'code' => ['required', 'string', 'max:50', 'unique:territories,code,'.$this->route('territory')],
             'description' => ['nullable', 'string'],
             'boundaries' => ['nullable', 'array'],
             'is_active' => ['required', 'boolean'],

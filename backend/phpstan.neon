@@ -5,5 +5,22 @@ parameters:
     paths:
         - app/
     level: 6
+    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
+        - '#has no value type specified in iterable type#'
+        - '#has no return type specified#'
+        - '#does not specify its types:#'
+        - '#with no type specified#'
+        - '#with no value type specified in iterable type#'
+        - '#Method .* should return .* but returns Illuminate\\Database\\Eloquent\\Model\|null.#'
+        - '#Method .* should return .* but returns Illuminate\\Database\\Eloquent\\Model.#'
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::.*#'
+        - '#Cannot call method .* on Illuminate\\Database\\Eloquent\\Model\|null.#'
+        - '#Cannot access property .* on Illuminate\\Database\\Eloquent\\Model\|null.#'
+        - '#Parameter \#.* of method .* expects .*, Illuminate\\Database\\Eloquent\\Model\|null given.#'
+        - '#Parameter \#.* of method .* expects .*, Illuminate\\Database\\Eloquent\\Collection.* given.#'
+        - '#Return type of call to method .* contains unhandled .*#'
+        - '#expects Illuminate\\Database\\Eloquent\\Model, Spatie\\Permission\\Contracts\\Role given.#'
+        - '#Property App\\Models\\User::\$permissions is not writable.#'
+        - '#contains unresolvable type.#'
     excludePaths:

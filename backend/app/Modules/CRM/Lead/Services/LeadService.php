@@ -2,21 +2,24 @@
 
 namespace App\Modules\CRM\Lead\Services;
 
+use App\Models\Lead;
+use App\Modules\Notification\Services\NotificationService;
 use App\Repositories\LeadRepository;
 use App\Services\GeoService;
-use App\Models\Lead;
 use Illuminate\Validation\ValidationException;
 
 class LeadService
 {
     protected LeadRepository $leadRepository;
+
     protected GeoService $geoService;
-    protected \App\Modules\Notification\Services\NotificationService $notificationService;
+
+    protected NotificationService $notificationService;
 
     public function __construct(
-        LeadRepository $leadRepository, 
+        LeadRepository $leadRepository,
         GeoService $geoService,
-        \App\Modules\Notification\Services\NotificationService $notificationService
+        NotificationService $notificationService
     ) {
         $this->leadRepository = $leadRepository;
         $this->geoService = $geoService;
@@ -34,12 +37,12 @@ class LeadService
         // 2. Mandatory Geo-Capture and Auto-Assignment
         if (isset($data['latitude']) && isset($data['longitude'])) {
             $geoChain = $this->geoService->getFullGeoChain((float) $data['latitude'], (float) $data['longitude']);
-            
+
             if ($geoChain['is_mapped']) {
                 $data['locality_id'] = $geoChain['locality']?->id;
                 $data['territory_id'] = $geoChain['territory']?->id;
                 $data['division_id'] = $geoChain['division']?->id;
-                
+
                 if ($geoChain['bdm']) {
                     $data['assigned_bdm_id'] = $geoChain['bdm']->id;
                     $data['status'] = 'assigned';
@@ -83,16 +86,16 @@ class LeadService
 
         // Recalculate geo-mapping if coordinates changed
         if (
-            (isset($data['latitude']) && (float)$data['latitude'] !== (float)$lead->latitude) ||
-            (isset($data['longitude']) && (float)$data['longitude'] !== (float)$lead->longitude)
+            (isset($data['latitude']) && (float) $data['latitude'] !== (float) $lead->latitude) ||
+            (isset($data['longitude']) && (float) $data['longitude'] !== (float) $lead->longitude)
         ) {
             $geoChain = $this->geoService->getFullGeoChain((float) $data['latitude'], (float) $data['longitude']);
-            
+
             if ($geoChain['is_mapped']) {
                 $data['locality_id'] = $geoChain['locality']?->id;
                 $data['territory_id'] = $geoChain['territory']?->id;
                 $data['division_id'] = $geoChain['division']?->id;
-                
+
                 if ($geoChain['bdm']) {
                     $data['assigned_bdm_id'] = $geoChain['bdm']->id;
                     if ($lead->status === 'new') {

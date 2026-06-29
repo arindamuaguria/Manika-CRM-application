@@ -2,22 +2,23 @@
 
 namespace App\Modules\CRM\Deal\Services;
 
-use App\Repositories\DealRepository;
 use App\Models\Deal;
 use App\Models\DealDocument;
 use App\Models\Lead;
+use App\Modules\Notification\Services\NotificationService;
+use App\Repositories\DealRepository;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class DealService
 {
     protected DealRepository $dealRepository;
-    protected \App\Modules\Notification\Services\NotificationService $notificationService;
+
+    protected NotificationService $notificationService;
 
     public function __construct(
         DealRepository $dealRepository,
-        \App\Modules\Notification\Services\NotificationService $notificationService
+        NotificationService $notificationService
     ) {
         $this->dealRepository = $dealRepository;
         $this->notificationService = $notificationService;
@@ -176,6 +177,7 @@ class DealService
 
         if ($docs->isEmpty()) {
             $deal->update(['verification_status' => 'pending']);
+
             return;
         }
 

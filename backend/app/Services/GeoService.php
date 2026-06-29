@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Division;
 use App\Models\Locality;
 use App\Models\Territory;
-use App\Models\Division;
 use App\Models\User;
 
 class GeoService
@@ -31,6 +31,7 @@ class GeoService
     public function identifyTerritory(int $localityId): ?Territory
     {
         $locality = Locality::with('territory')->find($localityId);
+
         return $locality?->territory;
     }
 
@@ -40,6 +41,7 @@ class GeoService
     public function assignBDM(int $territoryId): ?User
     {
         $territory = Territory::with('activeAssignment.user')->find($territoryId);
+
         return $territory?->activeAssignment?->user;
     }
 
@@ -50,7 +52,7 @@ class GeoService
     {
         $locality = $this->identifyLocality($lat, $lng);
 
-        if (!$locality) {
+        if (! $locality) {
             return [
                 'locality' => null,
                 'territory' => null,
@@ -81,7 +83,7 @@ class GeoService
     {
         // GeoJSON polygon coordinates structure:
         // {"type": "Polygon", "coordinates": [[[lng1, lat1], [lng2, lat2], ...]]}
-        if (!isset($polygon['coordinates']) || !is_array($polygon['coordinates'])) {
+        if (! isset($polygon['coordinates']) || ! is_array($polygon['coordinates'])) {
             return false;
         }
 
@@ -104,7 +106,7 @@ class GeoService
                 && ($latitude < ($xj - $xi) * ($longitude - $yi) / ($yj - $yi) + $xi);
 
             if ($intersect) {
-                $inside = !$inside;
+                $inside = ! $inside;
             }
         }
 

@@ -2,10 +2,10 @@
 
 namespace App\Modules\Partner\Services;
 
-use App\Repositories\PartnerRepository;
-use App\Models\Partner;
 use App\Models\Deal;
+use App\Models\Partner;
 use App\Models\User;
+use App\Repositories\PartnerRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -41,11 +41,11 @@ class PartnerService
 
         // 3. Create a new User account for the partner
         $roleName = $data['partner_type'] === 'seller' ? 'Seller' : 'Service Person';
-        $email = $deal->lead->contact_email ?: 'partner_' . $deal->id . '@manika.com';
+        $email = $deal->lead->contact_email ?: 'partner_'.$deal->id.'@manika.com';
 
         // Check if user email already exists
         $user = User::where('email', $email)->first();
-        if (!$user) {
+        if (! $user) {
             $user = User::create([
                 'name' => $deal->lead->contact_name,
                 'email' => $email,

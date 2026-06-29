@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\Lead;
 use App\Models\Deal;
+use App\Models\Division;
+use App\Models\Lead;
 use App\Models\Partner;
 use App\Models\Territory;
-use App\Models\Division;
+use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -18,7 +18,9 @@ class ReportTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected User $bdm;
+
     protected Territory $territory;
 
     protected function setUp(): void
@@ -99,7 +101,7 @@ class ReportTest extends TestCase
         $response = $this->actingAs($this->admin, 'sanctum')->get('/api/reports/leads/export');
         $response->assertStatus(200)
             ->assertHeader('Content-Type', 'text/csv; charset=UTF-8')
-            ->assertHeader('Content-Disposition', 'attachment; filename="leads_report_' . now()->format('YmdHis') . '.csv"');
+            ->assertHeader('Content-Disposition', 'attachment; filename="leads_report_'.now()->format('YmdHis').'.csv"');
         $this->assertStringContainsString('Mumbai Store', $response->streamedContent());
 
         // 2. Export Deals

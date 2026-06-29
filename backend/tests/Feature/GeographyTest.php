@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\Division;
-use App\Models\Territory;
 use App\Models\Locality;
+use App\Models\Territory;
+use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -16,6 +16,7 @@ class GeographyTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected User $bdm;
 
     protected function setUp(): void
@@ -108,7 +109,7 @@ class GeographyTest extends TestCase
     {
         $division = Division::create(['name' => 'West Division', 'code' => 'DIV-WEST']);
         $territory = Territory::create(['division_id' => $division->id, 'name' => 'Mumbai', 'code' => 'TERR-MUMBAI']);
-        
+
         // Define a square polygon around Mumbai area: [lng, lat]
         // Coordinates: (72.8, 19.0) to (73.0, 19.2)
         $polygon = [
@@ -118,8 +119,8 @@ class GeographyTest extends TestCase
                 [73.0, 19.0],
                 [73.0, 19.2],
                 [72.8, 19.2],
-                [72.8, 19.0]
-            ]]
+                [72.8, 19.0],
+            ]],
         ];
 
         $locality = Locality::create([

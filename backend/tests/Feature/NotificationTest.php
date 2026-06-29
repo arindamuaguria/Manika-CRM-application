@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\Lead;
+use App\Models\CrmNotification;
 use App\Models\Deal;
 use App\Models\DealDocument;
-use App\Models\CrmNotification;
+use App\Models\Lead;
+use App\Models\User;
+use App\Modules\CRM\Lead\Services\LeadService;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -19,7 +20,9 @@ class NotificationTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected User $bdm;
+
     protected Lead $lead;
 
     protected function setUp(): void
@@ -45,7 +48,7 @@ class NotificationTest extends TestCase
     #[Test]
     public function bdm_receives_notification_on_lead_assignment()
     {
-        resolve(\App\Modules\CRM\Lead\Services\LeadService::class)->updateLead($this->lead->id, [
+        resolve(LeadService::class)->updateLead($this->lead->id, [
             'title' => 'Delhi Coffee Shop',
             'contact_name' => 'Amit Kumar',
             'contact_mobile' => '9999999981',

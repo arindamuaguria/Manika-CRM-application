@@ -25,7 +25,7 @@ class LocalityController extends BaseApiController
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('code', 'like', "%{$search}%");
+                    ->orWhere('code', 'like', "%{$search}%");
             });
         }
 
@@ -34,6 +34,7 @@ class LocalityController extends BaseApiController
         }
 
         $localities = $query->paginate($request->input('per_page', 15));
+
         return $this->successResponse($localities, 'Localities retrieved successfully');
     }
 
@@ -64,6 +65,7 @@ class LocalityController extends BaseApiController
         Gate::authorize('localities.view');
 
         $locality = Locality::with('territory.division')->findOrFail($id);
+
         return $this->successResponse($locality, 'Locality details retrieved successfully');
     }
 

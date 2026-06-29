@@ -25,11 +25,12 @@ class DivisionController extends BaseApiController
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('code', 'like', "%{$search}%");
+                    ->orWhere('code', 'like', "%{$search}%");
             });
         }
 
         $divisions = $query->paginate($request->input('per_page', 15));
+
         return $this->successResponse($divisions, 'Divisions retrieved successfully');
     }
 
@@ -60,6 +61,7 @@ class DivisionController extends BaseApiController
         Gate::authorize('divisions.view');
 
         $division = Division::with('territories')->findOrFail($id);
+
         return $this->successResponse($division, 'Division details retrieved successfully');
     }
 

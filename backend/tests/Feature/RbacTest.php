@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use PHPUnit\Framework\Attributes\Test;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -15,6 +14,7 @@ class RbacTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected User $bdm;
 
     protected function setUp(): void

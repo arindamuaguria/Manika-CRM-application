@@ -2,12 +2,12 @@
 
 namespace App\Modules\Auth\Services;
 
-use App\Repositories\UserRepository;
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\ValidationException;
 
 class AuthService
 {
@@ -21,21 +21,19 @@ class AuthService
     /**
      * Authenticate a user and return a Sanctum token.
      *
-     * @param array $credentials
-     * @return array
      * @throws ValidationException
      */
     public function login(array $credentials): array
     {
         $user = $this->userRepository->findByEmail($credentials['email']);
 
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             throw ValidationException::withMessages([
                 'email' => [__('auth.failed')],
             ]);
         }
 
-        if (!$user->is_active) {
+        if (! $user->is_active) {
             throw ValidationException::withMessages([
                 'email' => ['Your account is inactive.'],
             ]);
@@ -63,9 +61,6 @@ class AuthService
 
     /**
      * Log out the current user by revoking their token.
-     *
-     * @param User $user
-     * @return void
      */
     public function logout(User $user): void
     {
@@ -80,8 +75,6 @@ class AuthService
     /**
      * Send password reset link.
      *
-     * @param string $email
-     * @return string
      * @throws ValidationException
      */
     public function sendResetLink(string $email): string
@@ -100,8 +93,6 @@ class AuthService
     /**
      * Reset the user's password.
      *
-     * @param array $data
-     * @return string
      * @throws ValidationException
      */
     public function resetPassword(array $data): string

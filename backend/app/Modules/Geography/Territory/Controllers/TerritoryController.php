@@ -28,7 +28,7 @@ class TerritoryController extends BaseApiController
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('code', 'like', "%{$search}%");
+                    ->orWhere('code', 'like', "%{$search}%");
             });
         }
 
@@ -45,6 +45,7 @@ class TerritoryController extends BaseApiController
         }
 
         $territories = $query->paginate($request->input('per_page', 15));
+
         return $this->successResponse($territories, 'Territories retrieved successfully');
     }
 
@@ -75,6 +76,7 @@ class TerritoryController extends BaseApiController
         Gate::authorize('territories.view');
 
         $territory = Territory::with(['division', 'activeAssignment.user', 'localities'])->findOrFail($id);
+
         return $this->successResponse($territory, 'Territory details retrieved successfully');
     }
 
@@ -133,7 +135,7 @@ class TerritoryController extends BaseApiController
 
         $bdm = User::findOrFail($request->input('user_id'));
 
-        if (!$bdm->hasRole('BDM')) {
+        if (! $bdm->hasRole('BDM')) {
             throw ValidationException::withMessages([
                 'user_id' => ['The selected user is not a BDM.'],
             ]);

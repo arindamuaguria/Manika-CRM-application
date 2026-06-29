@@ -15,7 +15,7 @@ class UpdateDivisionRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'code' => ['required', 'string', 'max:50', 'unique:divisions,code,' . $this->route('division')],
+            'code' => ['required', 'string', 'max:50', 'unique:divisions,code,'.$this->route('division')],
             'description' => ['nullable', 'string'],
             'is_active' => ['required', 'boolean'],
         ];

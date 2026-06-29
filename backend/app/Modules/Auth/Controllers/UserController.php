@@ -21,8 +21,8 @@ class UserController extends BaseApiController
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
             });
         }
 
@@ -31,6 +31,7 @@ class UserController extends BaseApiController
         }
 
         $users = $query->paginate($request->input('per_page', 15));
+
         return $this->successResponse($users, 'Users retrieved successfully');
     }
 
@@ -73,7 +74,7 @@ class UserController extends BaseApiController
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$id],
             'phone' => ['nullable', 'string', 'max:20'],
             'password' => ['nullable', 'string', 'min:8'],
             'role' => ['required', 'string', 'exists:roles,name'],
