@@ -74,4 +74,4 @@ Implement in-app notifications, email notifications, and SMS notifications trigg
 - [ ] All notification events logged in activity_log
 
 ## Status
-Not Started
+Completed
