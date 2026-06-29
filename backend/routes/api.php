@@ -14,6 +14,7 @@ use App\Modules\CRM\Deal\Controllers\DealController;
 use App\Modules\Partner\Controllers\PartnerController;
 use App\Modules\Dashboard\Controllers\DashboardController;
 use App\Modules\Notification\Controllers\NotificationController;
+use App\Modules\Report\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,9 +67,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('notifications/read-all', [NotificationController::class, 'markAllRead']);
 
     // Report routes - Module 09
-    Route::prefix('reports')->group(function () {
-        // Report routes
-    });
+    Route::get('reports/leads', [ReportController::class, 'previewLeads']);
+    Route::get('reports/leads/export', [ReportController::class, 'exportLeads']);
+    Route::get('reports/deals', [ReportController::class, 'previewDeals']);
+    Route::get('reports/deals/export', [ReportController::class, 'exportDeals']);
+    Route::get('reports/partners', [ReportController::class, 'previewPartners']);
+    Route::get('reports/partners/export', [ReportController::class, 'exportPartners']);
 
     // User/Role/Permission management routes - Module 02 (Admin only)
     Route::middleware('role:Admin')->group(function () {
