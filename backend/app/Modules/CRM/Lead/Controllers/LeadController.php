@@ -5,6 +5,7 @@ namespace App\Modules\CRM\Lead\Controllers;
 use App\Http\Controllers\Api\BaseApiController;
 use App\Models\Lead;
 use App\Modules\CRM\Lead\Requests\StoreLeadRequest;
+use App\Modules\CRM\Lead\Requests\StorePublicLeadRequest;
 use App\Modules\CRM\Lead\Requests\UpdateLeadRequest;
 use App\Modules\CRM\Lead\Services\LeadService;
 use Illuminate\Http\JsonResponse;
@@ -72,6 +73,30 @@ class LeadController extends BaseApiController
             ->log("Created lead: {$lead->title} (Status: {$lead->status})");
 
         return $this->createdResponse($lead, 'Lead created successfully');
+    }
+
+    /**
+     * Public lead submission from marketing campaigns.
+     */
+    public function storePublic(StorePublicLeadRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        if (empty($data['title'])) {
+            $data['title'] = 'Online Inquiry - ' . ($data['company_name'] ?? $data['contact_name']);
+        }
+
+        if (empty($data['source'])) {
+            $data['source'] = 'Web Form';
+        }
+
+        $lead = $this->leadService->createLead($data);
+
+        activity()
+            ->performedOn($lead)
+            ->log("Public lead submitted: {$lead->title} (Status: {$lead->status})");
+
+        return $this->createdResponse($lead, 'Lead submitted successfully');
     }
 
     /**

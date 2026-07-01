@@ -19,9 +19,13 @@ import DealList from '@/pages/crm/DealList';
 import DealDetail from '@/pages/crm/DealDetail';
 import PartnerList from '@/pages/partner/PartnerList';
 import PartnerDetail from '@/pages/partner/PartnerDetail';
+import PartnerForm from '@/pages/partner/PartnerForm';
+import PublicPartnerForm from '@/pages/partner/PublicPartnerForm';
 import Dashboard from '@/pages/Dashboard';
+import GeoDashboard from '@/pages/dashboard/GeoDashboard';
 import NotificationList from '@/pages/notification/NotificationList';
 import Reports from '@/pages/report/Reports';
+import PublicLeadForm from '@/pages/crm/PublicLeadForm';
 
 // Placeholder page component (will be replaced in later modules)
 function PlaceholderPage({ title }: { title: string }) {
@@ -42,6 +46,8 @@ function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/leads/public" element={<PublicLeadForm />} />
+      <Route path="/partners/register" element={<PublicPartnerForm />} />
 
       {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
@@ -49,6 +55,7 @@ function AppRoutes() {
         <Route element={<RoleBasedRoute allowedRoles={['Admin']} />}>
           <Route element={<AdminLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/geo-dashboard" element={<GeoDashboard />} />
             <Route path="/geography/divisions" element={<DivisionList />} />
             <Route path="/geography/divisions/create" element={<DivisionForm />} />
             <Route path="/geography/divisions/:id/edit" element={<DivisionForm />} />
@@ -64,6 +71,8 @@ function AppRoutes() {
             <Route path="/crm/deals" element={<DealList />} />
             <Route path="/crm/deals/:id" element={<DealDetail />} />
             <Route path="/partners" element={<PartnerList />} />
+            <Route path="/partners/create" element={<PartnerForm />} />
+            <Route path="/partners/:id/edit" element={<PartnerForm />} />
             <Route path="/partners/:id" element={<PartnerDetail />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/notifications" element={<NotificationList />} />
@@ -83,9 +92,12 @@ function AppRoutes() {
             <Route path="/crm/deals" element={<DealList />} />
             <Route path="/crm/deals/:id" element={<DealDetail />} />
             <Route path="/partners" element={<PartnerList />} />
+            <Route path="/partners/create" element={<PartnerForm />} />
+            <Route path="/partners/:id/edit" element={<PartnerForm />} />
             <Route path="/partners/:id" element={<PartnerDetail />} />
             <Route path="/notifications" element={<NotificationList />} />
-            <Route path="/territory-map" element={<PlaceholderPage title="Territory Map" />} />
+            <Route path="/territory-map" element={<GeoDashboard />} />
+            <Route path="/geo-dashboard" element={<GeoDashboard />} />
           </Route>
         </Route>
       </Route>

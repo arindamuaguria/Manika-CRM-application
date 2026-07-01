@@ -186,8 +186,15 @@ export default function LeadList() {
                         <Target size={18} />
                       </div>
                       <div>
-                        <p className="font-semibold text-neutral-900">{l.title}</p>
-                        <div className="flex items-center gap-3 text-xs text-neutral-500 mt-0.5">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-neutral-900">{l.title}</p>
+                          {l.company_name && (
+                            <span className="text-xs font-semibold text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded-md">
+                              {l.company_name}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-3 text-xs text-neutral-500 mt-1">
                           <span className="flex items-center gap-1">
                             <Phone size={12} /> {l.contact_mobile}
                           </span>

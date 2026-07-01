@@ -5,8 +5,11 @@ namespace App\Modules\Partner\Services;
 use App\Models\Deal;
 use App\Models\Partner;
 use App\Models\User;
+use App\Mail\WelcomePartnerMail;
 use App\Repositories\PartnerRepository;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class PartnerService
@@ -95,5 +98,51 @@ class PartnerService
             ->log("Updated service coverage localities for partner: {$partner->business_name}");
 
         return $partner->load('coverageLocalities');
+    }
+
+    /**
+     * Register a partner from the public onboarding portal.
+     */
+    public function registerPublicPartner(array $data): Partner
+    {
+        return DB::transaction(function () use ($data) {
+            // 1. Geo-identify territory/locality from coordinates
+            if (!empty($data['latitude']) && !empty($data['longitude'])) {
+                $geoService = app(\App\Modules\Geography\Services\GeoService::class);
+                $geoResult = $geoService->identifyPoint($data['latitude'], $data['longitude']);
+                if ($geoResult['is_mapped']) {
+                    $data['territory_id'] = $geoResult['territory']->id ?? null;
+                    $data['locality_id'] = $geoResult['locality']->id ?? null;
+                }
+            }
+
+            // 2. Set defaults
+            $data['status'] = 'pending';
+            $data['registration_source'] = 'public';
+
+            if (empty($data['business_name'])) {
+                $data['business_name'] = $data['contact_name'] . "'s Business";
+            }
+
+            // 3. Create partner record
+            $partner = $this->partnerRepository->create($data);
+
+            // 4. Send welcome email
+            if (!empty($partner->contact_email)) {
+                Mail::to($partner->contact_email)->send(new WelcomePartnerMail($partner));
+            }
+
+            // 5. Notify admins
+            $notificationService = app(\App\Modules\Notification\Services\NotificationService::class);
+            $notificationService->sendToRole(
+                'Admin',
+                'partner_application',
+                'New Partner Application',
+                "{$partner->contact_name} has applied as a {$partner->partner_type}.",
+                ['partner_id' => $partner->id]
+            );
+
+            return $partner;
+        });
     }
 }

@@ -4,20 +4,29 @@ namespace App\Modules\Partner\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePartnerRequest extends FormRequest
+class StorePublicPartnerRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return true; // Public endpoint
     }
 
     public function rules(): array
     {
-        return [
-            'deal_id' => ['required', 'exists:deals,id'],
+        $rules = [
+            'contact_name' => ['required', 'string', 'max:255'],
+            'contact_email' => ['required', 'email', 'max:255'],
+            'contact_mobile' => ['required', 'string', 'max:20'],
             'partner_type' => ['required', 'string', 'in:bdm,seller,service_person'],
-            'business_name' => ['required', 'string', 'max:255'],
-            'business_address' => ['required', 'string'],
+            'business_name' => ['nullable', 'string', 'max:255'],
+            'business_address' => ['nullable', 'string'],
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
+            'appointment_datetime' => ['required', 'date', 'after:now'],
+            'appointment_notes' => ['nullable', 'string', 'max:1000'],
+            'utm_source' => ['nullable', 'string', 'max:100'],
+            'utm_medium' => ['nullable', 'string', 'max:100'],
+            'utm_campaign' => ['nullable', 'string', 'max:100'],
             // BDM fields
             'experience_years' => ['nullable', 'integer', 'min:0', 'max:50'],
             'previous_employer' => ['nullable', 'string', 'max:255'],
@@ -41,13 +50,20 @@ class StorePartnerRequest extends FormRequest
             'license_type' => ['nullable', 'string', 'max:30'],
             'vehicle_type' => ['nullable', 'string', 'max:50'],
             'vehicle_registration' => ['nullable', 'string', 'max:30'],
-            // Common fields
-            'appointment_datetime' => ['nullable', 'date'],
-            'appointment_notes' => ['nullable', 'string', 'max:1000'],
-            'registration_source' => ['nullable', 'string', 'max:30'],
-            'utm_source' => ['nullable', 'string', 'max:100'],
-            'utm_medium' => ['nullable', 'string', 'max:100'],
-            'utm_campaign' => ['nullable', 'string', 'max:100'],
         ];
+
+        // Conditional required fields based on partner_type
+        if ($this->input('partner_type') === 'bdm') {
+            $rules['education_level'] = ['required', 'string', 'max:100'];
+        } elseif ($this->input('partner_type') === 'seller') {
+            $rules['business_name'] = ['required', 'string', 'max:255'];
+            $rules['business_address'] = ['required', 'string'];
+            $rules['business_type'] = ['required', 'string', 'max:100'];
+        } elseif ($this->input('partner_type') === 'service_person') {
+            $rules['business_name'] = ['required', 'string', 'max:255'];
+            $rules['services_offered'] = ['required', 'array', 'min:1'];
+        }
+
+        return $rules;
     }
 }

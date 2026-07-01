@@ -5,6 +5,7 @@ namespace App\Modules\Partner\Controllers;
 use App\Http\Controllers\Api\BaseApiController;
 use App\Models\Partner;
 use App\Modules\Partner\Requests\StorePartnerRequest;
+use App\Modules\Partner\Requests\StorePublicPartnerRequest;
 use App\Modules\Partner\Requests\UpdatePartnerRequest;
 use App\Modules\Partner\Services\PartnerService;
 use Illuminate\Http\JsonResponse;
@@ -127,5 +128,19 @@ class PartnerController extends BaseApiController
         $partner = $this->partnerService->syncCoverage($id, $request->input('locality_ids'));
 
         return $this->successResponse($partner, 'Service coverage updated successfully');
+    }
+
+    /**
+     * Public partner registration (no auth required).
+     */
+    public function publicRegister(StorePublicPartnerRequest $request): JsonResponse
+    {
+        $partner = $this->partnerService->registerPublicPartner($request->validated());
+
+        return $this->successResponse(
+            $partner->load(['territory', 'locality']),
+            'Partner application submitted successfully. A welcome email has been sent.',
+            201
+        );
     }
 }

@@ -30,12 +30,44 @@ class Partner extends Model
         'status',
         'onboarded_at',
         'created_by',
+        // BDM-specific
+        'experience_years',
+        'previous_employer',
+        'experience_description',
+        'education_level',
+        'education_institution',
+        'education_field',
+        'preferred_territory_ids',
+        // Seller-specific
+        'gst_number',
+        'business_type',
+        'annual_turnover',
+        'product_categories',
+        // Service Person-specific
+        'services_offered',
+        'has_driving_license',
+        'driving_license_number',
+        'license_type',
+        'vehicle_type',
+        'vehicle_registration',
+        // Common
+        'appointment_datetime',
+        'appointment_notes',
+        'registration_source',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
     ];
 
     protected $casts = [
         'latitude' => 'double',
         'longitude' => 'double',
         'onboarded_at' => 'datetime',
+        'preferred_territory_ids' => 'array',
+        'product_categories' => 'array',
+        'services_offered' => 'array',
+        'has_driving_license' => 'boolean',
+        'appointment_datetime' => 'datetime',
     ];
 
     public function user(): BelongsTo
@@ -79,6 +111,8 @@ class Partner extends Model
                 'status',
                 'user_id',
                 'deal_id',
+                'appointment_datetime',
+                'registration_source',
             ])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();

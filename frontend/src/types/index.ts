@@ -130,14 +130,21 @@ export type LeadPriority = 'low' | 'medium' | 'high';
 export type DealStatus = 'draft' | 'verification' | 'documentation' | 'approval' | 'won' | 'lost';
 export type DocumentVerificationStatus = 'pending' | 'verified' | 'rejected';
 export type PartnerType = 'bdm' | 'seller' | 'service_person';
-export type PartnerStatus = 'active' | 'inactive' | 'suspended';
+export type PartnerStatus = 'pending' | 'active' | 'inactive' | 'suspended';
 
 export interface Lead {
   id: number;
   title: string;
   contact_name: string;
+  job_title: string | null;
   contact_email: string | null;
   contact_mobile: string;
+  alternate_mobile: string | null;
+  company_name: string | null;
+  industry: string | null;
+  company_size: string | null;
+  website: string | null;
+  linkedin_url: string | null;
   address: string | null;
   latitude: number | null;
   longitude: number | null;
@@ -152,6 +159,11 @@ export interface Lead {
   source: string | null;
   status: LeadStatus;
   priority: LeadPriority;
+  estimated_deal_value: number | null;
+  preferred_contact_method: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
   notes: string | null;
   is_mapped: boolean;
   created_by: number | null;
@@ -219,6 +231,33 @@ export interface Partner {
   status: PartnerStatus;
   onboarded_at: string | null;
   coverage_localities?: Locality[];
+  // BDM fields
+  experience_years: number | null;
+  previous_employer: string | null;
+  experience_description: string | null;
+  education_level: string | null;
+  education_institution: string | null;
+  education_field: string | null;
+  preferred_territory_ids: number[] | null;
+  // Seller fields
+  gst_number: string | null;
+  business_type: string | null;
+  annual_turnover: string | null;
+  product_categories: string[] | null;
+  // Service Person fields
+  services_offered: string[] | null;
+  has_driving_license: boolean;
+  driving_license_number: string | null;
+  license_type: string | null;
+  vehicle_type: string | null;
+  vehicle_registration: string | null;
+  // Common onboarding fields
+  appointment_datetime: string | null;
+  appointment_notes: string | null;
+  registration_source: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
   created_at: string;
   updated_at: string;
 }

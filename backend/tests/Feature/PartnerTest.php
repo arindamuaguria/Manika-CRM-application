@@ -11,6 +11,7 @@ use App\Models\Territory;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -151,5 +152,68 @@ class PartnerTest extends TestCase
             'locality_id' => $this->locality->id,
             'is_active' => true,
         ]);
+    }
+
+    #[Test]
+    public function test_public_partner_registration_creates_pending_partner(): void
+    {
+        Mail::fake();
+
+        $data = [
+            'contact_name' => 'Test Partner',
+            'contact_email' => 'test@partner.com',
+            'contact_mobile' => '9876543210',
+            'partner_type' => 'seller',
+            'business_name' => 'Test Business',
+            'business_address' => '123 Test Street',
+            'business_type' => 'Retailer',
+            'appointment_datetime' => now()->addDays(3)->format('Y-m-d H:i:s'),
+        ];
+
+        $response = $this->postJson('/api/partners/public/register', $data);
+
+        $response->assertStatus(201)
+                 ->assertJsonPath('data.status', 'pending')
+                 ->assertJsonPath('data.registration_source', 'public');
+    }
+
+    #[Test]
+    public function test_public_partner_registration_validates_required_fields(): void
+    {
+        $response = $this->postJson('/api/partners/public/register', []);
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors(['contact_name', 'contact_email', 'contact_mobile', 'partner_type', 'appointment_datetime']);
+    }
+
+    #[Test]
+    public function test_public_bdm_registration_requires_education_level(): void
+    {
+        $data = [
+            'contact_name' => 'BDM Applicant',
+            'contact_email' => 'bdm@test.com',
+            'contact_mobile' => '9876543210',
+            'partner_type' => 'bdm',
+            'appointment_datetime' => now()->addDays(3)->format('Y-m-d H:i:s'),
+        ];
+
+        $response = $this->postJson('/api/partners/public/register', $data);
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors(['education_level']);
+    }
+
+    #[Test]
+    public function public_can_list_territories(): void
+    {
+        $response = $this->getJson('/api/territories/public');
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure([
+                     'success',
+                     'message',
+                     'data' => [
+                         'data',
+                         'current_page',
+                     ]
+                 ]);
     }
 }

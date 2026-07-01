@@ -16,6 +16,31 @@ use Illuminate\Validation\ValidationException;
 class TerritoryController extends BaseApiController
 {
     /**
+     * List all territories for public onboarding selection.
+     */
+    public function publicIndex(Request $request): JsonResponse
+    {
+        $query = Territory::with(['division'])->where('is_active', true);
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('code', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->has('division_id')) {
+            $query->where('division_id', $request->input('division_id'));
+        }
+
+        // Return a paginated list of territories
+        $territories = $query->paginate($request->input('per_page', 200));
+
+        return $this->successResponse($territories, 'Public territories retrieved successfully');
+    }
+
+    /**
      * List all territories.
      */
     public function index(Request $request): JsonResponse

@@ -201,4 +201,31 @@ class LeadTest extends TestCase
         ]);
         $response->assertStatus(403);
     }
+
+    #[Test]
+    public function public_lead_creation_works_without_authentication_and_auto_assigns()
+    {
+        $response = $this->postJson('/api/leads/public', [
+            'contact_name' => 'Ad Campaign Lead',
+            'contact_mobile' => '9888888888',
+            'contact_email' => 'ad@campaign.com',
+            'company_name' => 'Acme Corp',
+            'industry' => 'Technology',
+            'company_size' => '10-50',
+            'website' => 'acme.com',
+            'latitude' => 19.1,
+            'longitude' => 72.9,
+            'utm_source' => 'facebook',
+            'utm_medium' => 'cpc',
+            'utm_campaign' => 'spring_sale',
+        ]);
+
+        $response->assertStatus(201)
+            ->assertJsonPath('data.title', 'Online Inquiry - Acme Corp')
+            ->assertJsonPath('data.company_name', 'Acme Corp')
+            ->assertJsonPath('data.utm_campaign', 'spring_sale')
+            ->assertJsonPath('data.assigned_bdm_id', $this->bdm1->id)
+            ->assertJsonPath('data.status', 'assigned')
+            ->assertJsonPath('data.created_by', null);
+    }
 }

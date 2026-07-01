@@ -31,6 +31,7 @@ const adminNavItems = [
       { label: 'Divisions', icon: Building2, path: '/geography/divisions' },
       { label: 'Territories', icon: Map, path: '/geography/territories' },
       { label: 'Localities', icon: MapPin, path: '/geography/localities' },
+      { label: 'Geo Dashboard', icon: Globe, path: '/geo-dashboard' },
     ],
   },
   {

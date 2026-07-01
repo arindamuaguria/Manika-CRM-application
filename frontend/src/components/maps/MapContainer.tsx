@@ -38,7 +38,7 @@ export default function MapContainer({
     if (!script) {
       script = document.createElement('script');
       script.id = scriptId;
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=geometry,drawing`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=geometry,drawing&v=3.64`;
       script.async = true;
       script.defer = true;
       script.onload = () => setStatus('ready');

@@ -4,7 +4,7 @@ namespace App\Modules\CRM\Lead\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLeadRequest extends FormRequest
+class StorePublicLeadRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,7 +14,7 @@ class StoreLeadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
             'contact_name' => ['required', 'string', 'max:255'],
             'job_title' => ['nullable', 'string', 'max:255'],
             'contact_email' => ['nullable', 'email', 'max:255'],
@@ -26,12 +26,10 @@ class StoreLeadRequest extends FormRequest
             'website' => ['nullable', 'string', 'max:255'],
             'linkedin_url' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string'],
-            'latitude' => ['required', 'numeric', 'between:-90,90'],
-            'longitude' => ['required', 'numeric', 'between:-180,180'],
-            'priority' => ['nullable', 'string', 'in:low,medium,high'],
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'estimated_deal_value' => ['nullable', 'numeric', 'min:0'],
             'preferred_contact_method' => ['nullable', 'string', 'max:50'],
-            'source' => ['nullable', 'string', 'max:255'],
             'utm_source' => ['nullable', 'string', 'max:255'],
             'utm_medium' => ['nullable', 'string', 'max:255'],
             'utm_campaign' => ['nullable', 'string', 'max:255'],

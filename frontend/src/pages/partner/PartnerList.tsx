@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate as useAppNavigate } from 'react-router-dom';
 import api from '@/services/api';
 import type { Partner, Deal, PaginatedResponse, ApiResponse } from '@/types';
-import { Plus, Search, Eye, Trash2, Building2, Phone, Loader2 } from 'lucide-react';
+import { Plus, Search, Eye, Trash2, Building2, Phone, Loader2, CheckCircle, Calendar, Globe } from 'lucide-react';
 import { usePermission } from '@/hooks';
 
 export default function PartnerList() {
@@ -16,7 +16,7 @@ export default function PartnerList() {
   const navigate = useAppNavigate();
   const { can } = usePermission();
 
-  // Onboard Partner Modal State
+  // Onboard Partner Modal State (kept for deal conversion)
   const [isOnboardModalOpen, setIsOnboardModalOpen] = useState(false);
   const [wonDeals, setWonDeals] = useState<Deal[]>([]);
   const [selectedDealId, setSelectedDealId] = useState('');
@@ -48,7 +48,6 @@ export default function PartnerList() {
   const fetchWonDeals = async () => {
     try {
       const response = await api.get<PaginatedResponse<Deal>>('/deals?status=won&per_page=100');
-      // Filter out deals that already have a partner profile
       setWonDeals(response.data.data.data);
       if (response.data.data.data.length > 0) {
         setSelectedDealId(response.data.data.data[0].id.toString());
@@ -117,22 +116,72 @@ export default function PartnerList() {
     }
   };
 
+  const handleApprove = async (id: number) => {
+    if (!confirm('Approve this partner and set status to Active?')) return;
+    try {
+      await api.put(`/partners/${id}`, { status: 'active' });
+      fetchPartners();
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Failed to approve partner.');
+    }
+  };
+
+  const getStatusBadgeClass = (status: string) => {
+    switch (status) {
+      case 'active': return 'bg-success-50 text-success-700 border-success-100';
+      case 'pending': return 'bg-amber-50 text-amber-700 border-amber-200';
+      case 'suspended': return 'bg-danger-50 text-danger-700 border-danger-100';
+      case 'inactive': return 'bg-warning-50 text-warning-700 border-warning-100';
+      default: return 'bg-neutral-50 text-neutral-700 border-neutral-200';
+    }
+  };
+
+  const getSourceBadge = (source: string | null) => {
+    if (!source) return null;
+    switch (source) {
+      case 'public': return <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">Public</span>;
+      case 'admin': return <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-neutral-100 text-neutral-600 border border-neutral-200">Admin</span>;
+      case 'deal_conversion': return <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-success-50 text-success-700 border border-success-100">Deal</span>;
+      default: return <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-neutral-100 text-neutral-600 border border-neutral-200">{source}</span>;
+    }
+  };
+
+  const getPartnerTypeLabel = (type: string) => {
+    switch (type) {
+      case 'bdm': return 'BDM';
+      case 'seller': return 'Seller';
+      case 'service_person': return 'Service Person';
+      default: return type;
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-neutral-900">Partner Management</h1>
-          <p className="text-neutral-500 text-sm">Manage onboarded Sellers and Service Persons.</p>
+          <p className="text-neutral-500 text-sm">Manage onboarded BDMs, Sellers and Service Persons.</p>
         </div>
-        {can('partners.convert') && (
-          <button
-            onClick={handleOpenOnboardModal}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
-          >
-            <Plus size={18} />
-            Onboard Partner
-          </button>
-        )}
+        <div className="flex gap-3">
+          {can('partners.create') && (
+            <button
+              onClick={() => navigate('/partners/create')}
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
+            >
+              <Plus size={18} />
+              Create Partner
+            </button>
+          )}
+          {can('partners.convert') && (
+            <button
+              onClick={handleOpenOnboardModal}
+              className="flex items-center gap-2 px-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 font-semibold rounded-lg transition-colors cursor-pointer border border-neutral-200"
+            >
+              <Globe size={18} />
+              Convert Deal
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-4 items-center bg-white p-4 rounded-xl border border-neutral-200 shadow-sm">
@@ -165,6 +214,7 @@ export default function PartnerList() {
             className="px-4 py-2 bg-neutral-50 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2"
           >
             <option value="">All Types</option>
+            <option value="bdm">BDM</option>
             <option value="seller">Seller</option>
             <option value="service_person">Service Person</option>
           </select>
@@ -178,6 +228,7 @@ export default function PartnerList() {
             className="px-4 py-2 bg-neutral-50 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2"
           >
             <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
             <option value="suspended">Suspended</option>
@@ -197,7 +248,9 @@ export default function PartnerList() {
                 <th className="px-6 py-4">Business & Contact</th>
                 <th className="px-6 py-4">Partner Type</th>
                 <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4">Source</th>
                 <th className="px-6 py-4">Territory / Locality</th>
+                <th className="px-6 py-4">Appointment</th>
                 <th className="px-6 py-4">Onboarded At</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
@@ -222,20 +275,17 @@ export default function PartnerList() {
                     </div>
                   </td>
                   <td className="px-6 py-4 uppercase font-medium text-xs text-neutral-600">
-                    {p.partner_type === 'seller' ? 'Seller' : 'Service Person'}
+                    {getPartnerTypeLabel(p.partner_type)}
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border uppercase ${
-                        p.status === 'active'
-                          ? 'bg-success-50 text-success-700 border-success-100'
-                          : p.status === 'suspended'
-                          ? 'bg-danger-50 text-danger-700 border-danger-100'
-                          : 'bg-warning-50 text-warning-700 border-warning-100'
-                      }`}
+                      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border uppercase ${getStatusBadgeClass(p.status)}`}
                     >
                       {p.status}
                     </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    {getSourceBadge(p.registration_source)}
                   </td>
                   <td className="px-6 py-4">
                     <div>
@@ -243,10 +293,30 @@ export default function PartnerList() {
                       <p className="text-[10px] text-neutral-500">{p.locality?.name}</p>
                     </div>
                   </td>
+                  <td className="px-6 py-4">
+                    {p.appointment_datetime ? (
+                      <div className="flex items-center gap-1.5 text-xs text-neutral-600">
+                        <Calendar size={12} className="text-primary-500" />
+                        <span>{new Date(p.appointment_datetime).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}</span>
+                        <span className="text-neutral-400">{new Date(p.appointment_datetime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
+                      </div>
+                    ) : (
+                      <span className="text-xs text-neutral-400">—</span>
+                    )}
+                  </td>
                   <td className="px-6 py-4 text-neutral-500">
                     {p.onboarded_at ? new Date(p.onboarded_at).toLocaleDateString() : 'N/A'}
                   </td>
                   <td className="px-6 py-4 text-right space-x-2">
+                    {p.status === 'pending' && can('partners.update') && (
+                      <button
+                        onClick={() => handleApprove(p.id)}
+                        className="p-1.5 hover:bg-success-50 text-success-600 hover:text-success-700 rounded-lg transition-colors"
+                        title="Approve Partner"
+                      >
+                        <CheckCircle size={16} />
+                      </button>
+                    )}
                     <button
                       onClick={() => navigate(`/partners/${p.id}`)}
                       className="p-1.5 hover:bg-neutral-100 text-neutral-600 hover:text-neutral-900 rounded-lg transition-colors"
@@ -268,7 +338,7 @@ export default function PartnerList() {
               ))}
               {partners.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-neutral-500">
+                  <td colSpan={8} className="px-6 py-8 text-center text-neutral-500">
                     No partners found.
                   </td>
                 </tr>
@@ -302,11 +372,11 @@ export default function PartnerList() {
         )}
       </div>
 
-      {/* Onboard Partner Modal */}
+      {/* Onboard Partner Modal (Deal Conversion) */}
       {isOnboardModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 p-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl animate-scale-in">
-            <h2 className="text-xl font-bold text-neutral-950 mb-4">Onboard Approved Partner</h2>
+            <h2 className="text-xl font-bold text-neutral-950 mb-4">Onboard from Approved Deal</h2>
             {onboardError && (
               <div className="mb-4 p-3 rounded-lg bg-danger-50 border border-danger-100 text-danger-700 text-xs">
                 {onboardError}

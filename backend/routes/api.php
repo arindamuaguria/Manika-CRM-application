@@ -33,6 +33,10 @@ Route::prefix('auth')->group(function () {
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 });
 
+Route::post('leads/public', [LeadController::class, 'storePublic']);
+Route::post('partners/public/register', [PartnerController::class, 'publicRegister']);
+Route::get('territories/public', [\App\Modules\Geography\Territory\Controllers\TerritoryController::class, 'publicIndex']);
+
 // Protected routes (require authentication)
 Route::middleware('auth:sanctum')->group(function () {
     // User profile
@@ -60,6 +64,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Dashboard routes - Module 07
     Route::get('dashboard', [DashboardController::class, 'index']);
+    Route::get('geo-dashboard', [\App\Modules\Dashboard\Controllers\GeoDashboardController::class, 'index']);
 
     // Notification routes - Module 08
     Route::get('notifications', [NotificationController::class, 'index']);
